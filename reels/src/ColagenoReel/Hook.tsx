@@ -9,20 +9,14 @@ import { fontFamily } from "./font";
 
 type Props = {
   readonly title: string;
-  readonly subtitle: string;
   readonly accentColor: string;
 };
 
-export const Hook: React.FC<Props> = ({ title, subtitle, accentColor }) => {
+export const Hook: React.FC<Props> = ({ title, accentColor }) => {
   const frame = useCurrentFrame();
   const { fps, durationInFrames } = useVideoConfig();
 
   const pop = spring({ frame, fps, config: { damping: 12, stiffness: 180 } });
-  const subPop = spring({
-    frame: frame - 6,
-    fps,
-    config: { damping: 14, stiffness: 160 },
-  });
   const exit = interpolate(
     frame,
     [durationInFrames - 6, durationInFrames],
@@ -34,7 +28,7 @@ export const Hook: React.FC<Props> = ({ title, subtitle, accentColor }) => {
     <AbsoluteFill
       style={{
         alignItems: "center",
-        paddingTop: 300,
+        paddingTop: 260,
         fontFamily,
         opacity: exit,
       }}
@@ -55,22 +49,6 @@ export const Hook: React.FC<Props> = ({ title, subtitle, accentColor }) => {
         }}
       >
         {title}
-      </div>
-      <div
-        style={{
-          marginTop: 24,
-          transform: `scale(${subPop})`,
-          color: "white",
-          fontWeight: 800,
-          fontSize: 56,
-          textTransform: "uppercase",
-          WebkitTextStroke: "10px black",
-          paintOrder: "stroke fill",
-          textAlign: "center",
-          maxWidth: 860,
-        }}
-      >
-        {subtitle}
       </div>
     </AbsoluteFill>
   );

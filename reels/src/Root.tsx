@@ -13,8 +13,7 @@ export const RemotionRoot: React.FC = () => {
         height={1920}
         defaultProps={{
           hook: "COLÁGENO EN POLVO",
-          hookSub: "lo que nadie te cuenta",
-          cta: "SÍGUEME PARA MÁS",
+          cta: "SÍGUEME PARA MÁS MITOS DE SALUD",
           accentColor: "#FFD400",
         }}
       />

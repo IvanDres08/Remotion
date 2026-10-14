@@ -1,4 +1,9 @@
-import { AbsoluteFill, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import {
+  AbsoluteFill,
+  spring,
+  useCurrentFrame,
+  useVideoConfig,
+} from "remotion";
 import { fontFamily } from "./font";
 
 type Props = {
@@ -15,18 +20,18 @@ export const Cta: React.FC<Props> = ({ text, accentColor }) => {
   const pulse = 1 + 0.04 * Math.sin((frame / fps) * Math.PI * 3);
 
   return (
-    <AbsoluteFill
-      style={{ alignItems: "center", paddingTop: 340, fontFamily }}
-    >
+    <AbsoluteFill style={{ alignItems: "center", paddingTop: 300, fontFamily }}>
       <div
         style={{
           transform: `scale(${pop * pulse})`,
           backgroundColor: accentColor,
           color: "black",
           fontWeight: 900,
-          fontSize: 76,
+          fontSize: 64,
+          textAlign: "center",
+          maxWidth: 860,
           padding: "20px 40px",
-          borderRadius: 999,
+          borderRadius: 48,
           boxShadow: "0 12px 40px rgba(0,0,0,0.45)",
         }}
       >

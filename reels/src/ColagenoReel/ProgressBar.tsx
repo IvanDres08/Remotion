@@ -1,6 +1,8 @@
 import { AbsoluteFill, useCurrentFrame, useVideoConfig } from "remotion";
 
-export const ProgressBar: React.FC<{ readonly color: string }> = ({ color }) => {
+export const ProgressBar: React.FC<{ readonly color: string }> = ({
+  color,
+}) => {
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
 
