@@ -8,20 +8,17 @@ import {
   useVideoConfig,
 } from "remotion";
 import { fontFamily } from "./font";
+import { C, FACE_CAPTIONS_TOP, SCENE_CAPTIONS_TOP } from "./theme";
 
 type Props = {
-  // Timestamps are relative to the original media file. The parent sequence
-  // carries `trimBefore`, so the current frame here is already in media time.
+  // Timestamps are in composition time (after the silence cuts).
   readonly captions: Caption[];
-  readonly accentColor: string;
-  readonly top: number;
+  // [from, to) frame ranges where a full-screen scene is showing; captions
+  // drop below the graphics there and sit above the head otherwise.
+  readonly sceneRanges: readonly (readonly [number, number])[];
 };
 
-export const ReelCaptions: React.FC<Props> = ({
-  captions,
-  accentColor,
-  top,
-}) => {
+export const ReelCaptions: React.FC<Props> = ({ captions, sceneRanges }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const nowMs = (frame / fps) * 1000;
@@ -35,14 +32,20 @@ export const ReelCaptions: React.FC<Props> = ({
     [captions],
   );
 
-  const page = pages.find(
+  const pageIndex = pages.findIndex(
     (p, i) =>
       nowMs >= p.startMs &&
       nowMs < (pages[i + 1]?.startMs ?? p.startMs + p.durationMs),
   );
-  if (!page) {
+  if (pageIndex === -1) {
     return null;
   }
+  const page = pages[pageIndex];
+  // Alternate the highlight between the product's pink and lilac.
+  const accent = pageIndex % 2 === 0 ? C.hotPink : C.lilac;
+
+  const inScene = sceneRanges.some(([a, b]) => frame >= a && frame < b);
+  const top = inScene ? SCENE_CAPTIONS_TOP : FACE_CAPTIONS_TOP;
 
   const pop = spring({
     frame: frame - Math.round((page.startMs / 1000) * fps),
@@ -61,23 +64,28 @@ export const ReelCaptions: React.FC<Props> = ({
           lineHeight: 1.1,
           textAlign: "center",
           textTransform: "uppercase",
-          color: "white",
-          WebkitTextStroke: "14px black",
+          color: C.white,
+          WebkitTextStroke: `14px ${C.plum}`,
           paintOrder: "stroke fill",
-          textShadow: "0 8px 24px rgba(0,0,0,0.5)",
+          textShadow: `0 8px 24px rgba(0,0,0,0.5)`,
           maxWidth: 900,
           transform: `scale(${0.85 + 0.15 * pop})`,
-          whiteSpace: "pre-wrap",
         }}
       >
         {page.tokens.map((t, i) => {
           const active = nowMs >= t.fromMs && nowMs < t.toMs;
+          const word = t.text.trimStart();
           return (
             <span
               key={t.fromMs}
-              style={{ color: active ? accentColor : "white" }}
+              style={{
+                color: active ? accent : C.white,
+                display: "inline-block",
+                // The thick outline eats into a normal space; use a margin.
+                marginLeft: i > 0 && word !== t.text ? "0.35em" : 0,
+              }}
             >
-              {i === 0 ? t.text.trimStart() : t.text}
+              {word}
             </span>
           );
         })}

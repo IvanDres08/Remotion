@@ -85,3 +85,12 @@ Antes de editar, si no está claro, pregunta solo lo imprescindible:
 - ¿Subtítulos sí/no, idioma, colores o fuente de marca?
 - ¿Música o SFX propios?
 - ¿Texto del hook y del CTA, o los propongo yo?
+
+## 7. Notas de este entorno y patrones probados
+
+- **Red restringida:** Google Fonts, remotion.media y HuggingFace pueden estar bloqueados. Carga fuentes locales desde `@fontsource/*` con `@remotion/fonts` (ver `reels/src/ColagenoReel/font.ts`) y renderiza con el Chromium preinstalado: `--browser-executable=/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell`.
+- **Transcripción sin GPU:** Whisper small en ONNX (`sts-whisper-small` de npm) + `@huggingface/transformers` en Node con `return_timestamps: "word"`. Corrige el texto contra el guion del usuario.
+- **No dejar solo la cara:** alterna cara ↔ escenas a pantalla completa que ilustren lo que se dice (producto flotando sobre pedestal, tarjetas, contadores, barras, iconos, sellos), sincronizadas con los timestamps de las palabras. Cuando dos escenas van seguidas, no hagas transición de salida/entrada entre ellas. Ejemplo completo: `reels/src/ColagenoReel/`.
+- **Subtítulos encima de las escenas:** si hay cutaways, los subtítulos van en una capa superior con tiempos de composición y cambian de posición (sobre la cabeza en la cara, debajo de los gráficos en las escenas).
+- **Producto:** recorta el producto de la foto con una máscara (PIL) a PNG con alfa y anímalo (caída con spring, flotación, brillo que lo recorre, sombra de contacto).
+- **Paleta:** toma los colores del producto/marca para subtítulos, etiquetas y fondos.
