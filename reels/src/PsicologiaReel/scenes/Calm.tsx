@@ -10,7 +10,7 @@ const SAVE_AT = 40;
 export const Calm: React.FC = () => {
   const frame = useCurrentFrame();
   return (
-    <SceneShell tint="#EFFFF2" exit={false}>
+    <SceneShell tint="#EDF3EE" exit={false}>
       <Centered top={250}>
         <Sticker delay={BYE_AT} emoji="👋" bg={P.mint} fontSize={56}>
           Adiós sobrepensar
@@ -36,8 +36,8 @@ export const Calm: React.FC = () => {
           delay={SAVE_AT}
           emoji="📌"
           bg={P.white}
-          fontSize={48}
-          rotate={2}
+          fontSize={58}
+          rotate={0}
         >
           Guarda este video
         </Sticker>

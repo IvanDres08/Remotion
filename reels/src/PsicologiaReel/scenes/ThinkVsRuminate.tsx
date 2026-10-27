@@ -35,7 +35,7 @@ const Column: React.FC<{
       <div style={{ marginTop: 34 }}>
         <Emo char={emoji} size={150} />
       </div>
-      <div style={{ fontFamily, fontWeight: 900, fontSize: 66 }}>{title}</div>
+      <div style={{ fontFamily, fontWeight: 700, fontSize: 66 }}>{title}</div>
     </Card>
     <div
       style={{

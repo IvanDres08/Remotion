@@ -23,7 +23,7 @@ export const Night: React.FC = () => {
     extrapolateRight: "clamp",
   });
   return (
-    <SceneShell tint="#E6DDF8">
+    <SceneShell tint="#EAE6F0">
       <Emoji char="🌙" size={190} x={890} y={300} />
       <Emoji char="✨" size={90} x={700} y={250} delay={4} />
       <Emoji char="✨" size={70} x={180} y={300} delay={8} />
@@ -32,7 +32,7 @@ export const Night: React.FC = () => {
           left: 90,
           top: 230,
           padding: "16px 30px",
-          fontWeight: 900,
+          fontWeight: 700,
           fontSize: 56,
         }}
         bg={P.lilac}
@@ -52,7 +52,7 @@ export const Night: React.FC = () => {
               left: t.x,
               top: t.y,
               padding: "18px 30px",
-              fontWeight: 900,
+              fontWeight: 700,
               fontSize: 50,
             }}
           >
@@ -83,10 +83,10 @@ export const Night: React.FC = () => {
               boxSizing: "border-box",
             }}
           >
-            <div style={{ fontWeight: 900, fontSize: 40, color: P.inkSoft }}>
+            <div style={{ fontWeight: 700, fontSize: 40, color: P.inkSoft }}>
               <Emo char="💬" size={46} /> Conversación
             </div>
-            <div style={{ fontWeight: 900, fontSize: 60, marginTop: 8 }}>
+            <div style={{ fontWeight: 700, fontSize: 60, marginTop: 8 }}>
               «…y entonces yo le dije…»
             </div>
             <div
@@ -113,7 +113,7 @@ export const Night: React.FC = () => {
               delay={AGES_AT}
               bg={P.peach}
               emoji="🦖"
-              rotate={-6}
+              rotate={-2}
               fontSize={60}
             >
               Hace mil años

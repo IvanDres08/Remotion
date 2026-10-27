@@ -42,7 +42,7 @@ export const Separate: React.FC = () => {
       }}
     >
       <Emo char={emoji} size={140} />
-      <div style={{ fontFamily, fontWeight: 900, fontSize: 60, color: P.ink }}>
+      <div style={{ fontFamily, fontWeight: 700, fontSize: 60, color: P.ink }}>
         {label}
       </div>
     </div>
@@ -68,16 +68,18 @@ export const Separate: React.FC = () => {
           }}
         />
       ) : null}
-      <div
-        style={{
-          position: "absolute",
-          left: 470,
-          top: cutY - 70,
-          transform: "rotate(90deg)",
-        }}
-      >
-        <Emo char="✂️" size={130} />
-      </div>
+      {frame < APART_AT + 4 ? (
+        <div
+          style={{
+            position: "absolute",
+            left: 470,
+            top: cutY - 70,
+            transform: "rotate(90deg)",
+          }}
+        >
+          <Emo char="✂️" size={130} />
+        </div>
+      ) : null}
       <div
         style={{
           position: "absolute",
@@ -93,7 +95,7 @@ export const Separate: React.FC = () => {
           emoji="🔑"
           bg={P.lemon}
           fontSize={50}
-          rotate={3}
+          rotate={0}
         >
           La clave
         </Sticker>

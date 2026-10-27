@@ -29,50 +29,52 @@ def bandsweep(noise, f0, f1):
         y[i] = a1 - b1
     return y
 
-# whoosh: noise swept up then down
-tt = t(0.55); n = rng.standard_normal(len(tt))
-env = np.sin(np.pi * np.clip(tt / 0.55, 0, 1)) ** 2
-save("whoosh.wav", bandsweep(n, 400, 3500) * env, 0.6)
+# Soft, "polished" versions of the usual viral SFX: band-limited, no
+# distortion, gentle attacks.
+# whoosh: airy swish
+tt = t(0.6); n = rng.standard_normal(len(tt))
+env = np.sin(np.pi * np.clip(tt / 0.6, 0, 1)) ** 3
+save("whoosh.wav", lp(bandsweep(n, 250, 1600) * env, 0.35), 0.45)
 
-# pop: pitched blip
-tt = t(0.12)
-f = 900 * np.exp(-tt * 25) + 250
-save("pop.wav", np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-tt * 40), 0.7)
+# pop: rounded bubble pop
+tt = t(0.14)
+f = 520 * np.exp(-tt * 30) + 180
+save("pop.wav", np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-tt * 32) * np.minimum(1, tt * 600), 0.5)
 
-# ding: soft bell
+# ding: soft chime (marimba-like)
+tt = t(1.4)
+bell = sum(a * np.sin(2 * np.pi * fr * tt) * np.exp(-tt * d) for fr, a, d in [(880, 1, 3.5), (1320, 0.35, 5), (1760, 0.12, 7)])
+save("ding.wav", lp(bell * np.minimum(1, tt * 120), 0.5), 0.4)
+
+# boom: soft deep "thud" (cinematic hit without the crunch)
 tt = t(1.2)
-bell = sum(a * np.sin(2 * np.pi * fr * tt) * np.exp(-tt * d) for fr, a, d in [(1318.5, 1, 3), (2637, 0.35, 5), (3955, 0.15, 7), (1975.5, 0.25, 4)])
-save("ding.wav", bell * np.minimum(1, tt * 400), 0.5)
+f = 48 + 30 * np.exp(-tt * 10)
+body = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-tt * 3.5) * np.minimum(1, tt * 150)
+air = lp(rng.standard_normal(len(tt)), 0.05) * np.exp(-tt * 6) * 0.6
+save("boom.wav", lp(body + air, 0.2), 0.6)
 
-# boom: deep "impact" hit
-tt = t(1.1)
-f = 38 + 70 * np.exp(-tt * 9)
-body = np.tanh(2.5 * np.sin(2 * np.pi * np.cumsum(f) / SR)) * np.exp(-tt * 3.2)
-click = rng.standard_normal(len(tt)) * np.exp(-tt * 120) * 0.4
-save("boom.wav", body + click, 0.85)
-
-# riser: rising noise + tone
+# riser: gentle shimmer swell
 tt = t(1.0); n = rng.standard_normal(len(tt))
-env = (tt / 1.0) ** 2
-tone = np.sin(2 * np.pi * np.cumsum(300 + 900 * (tt / 1.0) ** 2) / SR) * 0.3
-save("riser.wav", (bandsweep(n, 300, 6000) + tone) * env, 0.5)
+env = (tt / 1.0) ** 2 * np.minimum(1, (1.0 - tt) * 20)
+tone = sum(np.sin(2 * np.pi * np.cumsum(fr * (1 + 0.5 * tt)) / SR) for fr in (440, 660)) * 0.25
+save("riser.wav", lp(bandsweep(n, 300, 2500) * 0.6 + tone, 0.4) * env, 0.35)
 
-# heartbeat: two thumps
+# heartbeat: muffled
 tt = t(0.9); x = np.zeros(len(tt))
-for st, a in [(0.0, 1), (0.22, 0.75)]:
+for st, a in [(0.0, 1), (0.22, 0.7)]:
     m = tt >= st; u = tt[m] - st
-    x[m] += a * np.sin(2 * np.pi * (55 + 40 * np.exp(-u * 30)) * u) * np.exp(-u * 18)
-save("heartbeat.wav", x, 0.8)
+    x[m] += a * np.sin(2 * np.pi * (50 + 25 * np.exp(-u * 30)) * u) * np.exp(-u * 16)
+save("heartbeat.wav", lp(x, 0.15), 0.6)
 
-# tick: clock tick
-tt = t(0.06)
-save("tick.wav", rng.standard_normal(len(tt)) * np.exp(-tt * 150) + np.sin(2 * np.pi * 2500 * tt) * np.exp(-tt * 90), 0.45)
+# tick: soft clock tick
+tt = t(0.05)
+save("tick.wav", lp(np.sin(2 * np.pi * 1800 * tt) * np.exp(-tt * 140), 0.4), 0.3)
 
-# scribble: pencil on paper
+# scribble: pencil on paper, softened
 tt = t(0.9); n = rng.standard_normal(len(tt))
 strokes = 0.5 + 0.5 * np.sign(np.sin(2 * np.pi * 7 * tt + 2 * np.sin(2 * np.pi * 1.3 * tt)))
-hp = n - lp(n, 0.25)
-save("scribble.wav", hp * strokes * np.minimum(1, tt * 20) * np.minimum(1, (0.9 - tt) * 10), 0.35)
+hp = lp(n - lp(n, 0.25), 0.5)
+save("scribble.wav", hp * strokes * np.minimum(1, tt * 20) * np.minimum(1, (0.9 - tt) * 10), 0.25)
 
 # music: soft pastel lo-fi loop (Fmaj7 - Em7 - Dm7 - Cmaj7), 75 bpm
 bpm = 75; beat = 60 / bpm; bar = 4 * beat; dur = 44
@@ -99,16 +101,16 @@ for b in range(int(dur / beat)):
     st = b * beat
     if b % 2 == 0:
         mm = (tt >= st) & (tt < st + 0.3); v = tt[mm] - st
-        mix[mm] += 0.35 * np.sin(2 * np.pi * (50 + 80 * np.exp(-v * 35)) * v) * np.exp(-v * 14)
+        mix[mm] += 0.2 * np.sin(2 * np.pi * (50 + 80 * np.exp(-v * 35)) * v) * np.exp(-v * 14)
     else:
         mm = (tt >= st) & (tt < st + 0.2); v = tt[mm] - st
         nz = rng.standard_normal(mm.sum())
-        mix[mm] += 0.10 * (nz - lp(nz, 0.3)) * np.exp(-v * 25)
+        mix[mm] += 0.05 * (nz - lp(nz, 0.3)) * np.exp(-v * 25)
     s2 = st + beat / 2
     mm = (tt >= s2) & (tt < s2 + 0.05); v = tt[mm] - s2
-    nz = rng.standard_normal(mm.sum()); mix[mm] += 0.05 * (nz - lp(nz, 0.5)) * np.exp(-v * 80)
+    nz = rng.standard_normal(mm.sum()); mix[mm] += 0.025 * (nz - lp(nz, 0.5)) * np.exp(-v * 80)
 mix += 0.004 * (rng.random(len(tt)) < 0.0008) * rng.standard_normal(len(tt)) * 8  # vinyl crackle
-mix = lp(mix, 0.5)
+mix = lp(mix, 0.3)
 fade = np.minimum(1, tt / 1.0) * np.minimum(1, (dur - tt) / 2.0)
 save("../musica.wav", mix * fade, 0.7)
 print("ok")

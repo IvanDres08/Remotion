@@ -24,10 +24,10 @@ export const Sticker: React.FC<{
   delay = 0,
   bg = P.lavender,
   fontSize = 64,
-  rotate = -2,
+  rotate = 0,
   style,
 }) => {
-  const pop = usePop(delay);
+  const pop = usePop(delay, 150, 18);
   return (
     <div
       style={{
@@ -35,22 +35,23 @@ export const Sticker: React.FC<{
         alignItems: "center",
         gap: 16,
         fontFamily,
-        fontWeight: 900,
-        fontSize,
-        lineHeight: 1.05,
+        fontWeight: 700,
+        fontSize: fontSize * 0.9,
+        lineHeight: 1.1,
+        letterSpacing: 0.5,
         textAlign: "center",
         textTransform: "uppercase",
         color: P.ink,
         backgroundColor: bg,
-        padding: "18px 34px",
-        borderRadius: 999,
-        border: `6px solid ${P.white}`,
-        boxShadow: "0 16px 40px rgba(61,53,83,0.25)",
+        padding: "16px 30px",
+        borderRadius: 22,
+        border: "3px solid rgba(255,255,255,0.85)",
+        boxShadow: "0 10px 30px rgba(62,58,71,0.14)",
         transform: `scale(${pop}) rotate(${rotate}deg)`,
         ...style,
       }}
     >
-      {emoji ? <Emo char={emoji} size={fontSize * 1.1} /> : null}
+      {emoji ? <Emo char={emoji} size={fontSize * 0.9} /> : null}
       <span>{children}</span>
     </div>
   );
@@ -86,7 +87,7 @@ export const Emoji: React.FC<{
   readonly style?: React.CSSProperties;
 }> = ({ char, size, x, y, delay = 0, bob = 10, spin = 0, style }) => {
   const frame = useCurrentFrame();
-  const pop = usePop(delay, 200, 10);
+  const pop = usePop(delay, 160, 16);
   return (
     <div
       style={{
@@ -96,7 +97,7 @@ export const Emoji: React.FC<{
         width: size,
         height: size,
         transform: `translateY(${Math.sin((frame + delay * 3) / 14) * bob}px) scale(${pop}) rotate(${spin * frame}deg)`,
-        filter: "drop-shadow(0 12px 18px rgba(61,53,83,0.22))",
+        filter: "drop-shadow(0 10px 14px rgba(62,58,71,0.14))",
         ...style,
       }}
     >
@@ -112,15 +113,15 @@ export const Card: React.FC<{
   readonly style?: React.CSSProperties;
   readonly delay?: number;
 }> = ({ children, bg = P.white, style, delay = 0 }) => {
-  const pop = usePop(delay, 160, 14);
+  const pop = usePop(delay, 150, 18);
   return (
     <div
       style={{
         position: "absolute",
         backgroundColor: bg,
-        borderRadius: 48,
-        border: `6px solid ${P.white}`,
-        boxShadow: "0 20px 50px rgba(61,53,83,0.2)",
+        borderRadius: 32,
+        border: "3px solid rgba(255,255,255,0.85)",
+        boxShadow: "0 12px 34px rgba(62,58,71,0.12)",
         fontFamily,
         color: P.ink,
         transform: `scale(${pop})`,

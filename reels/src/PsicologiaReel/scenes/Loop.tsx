@@ -10,9 +10,9 @@ const ORBIT = ["💭", "😟", "📱", "🗣️", "⏰", "💬"];
 
 export const Loop: React.FC = () => {
   const frame = useCurrentFrame();
-  const shake = frame >= CONFUSED_AT ? Math.sin(frame * 2.2) * 10 : 0;
+  const shake = frame >= CONFUSED_AT ? Math.sin(frame * 2.2) * 5 : 0;
   return (
-    <SceneShell tint="#FFEFF5" exit={false}>
+    <SceneShell tint="#F5ECEE" exit={false}>
       <Centered top={250}>
         <Sticker bg={P.pink} emoji="🔁">
           En bucle
@@ -92,7 +92,7 @@ export const Loop: React.FC = () => {
           opacity: interpolate(
             frame,
             [CONFUSED_AT, CONFUSED_AT + 3, CONFUSED_AT + 10],
-            [0, 0.25, 0],
+            [0, 0.1, 0],
             {
               extrapolateLeft: "clamp",
               extrapolateRight: "clamp",

@@ -29,10 +29,10 @@ export const Survival: React.FC = () => {
   );
   const shake =
     frame >= ANXIETY_AT && frame < ANXIETY_AT + 12
-      ? Math.sin(frame * 3) * 12
+      ? Math.sin(frame * 3) * 5
       : 0;
   return (
-    <SceneShell tint="#FFF1E6" enter={false}>
+    <SceneShell tint="#F6EEE7" enter={false}>
       <div
         style={{
           position: "absolute",
@@ -84,7 +84,7 @@ export const Survival: React.FC = () => {
         >
           <div
             style={{
-              fontWeight: 900,
+              fontWeight: 700,
               fontSize: 64,
               color: P.ink,
               marginBottom: 18,

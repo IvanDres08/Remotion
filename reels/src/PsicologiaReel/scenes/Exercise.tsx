@@ -64,13 +64,13 @@ export const Exercise: React.FC = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontWeight: 900,
+              fontWeight: 700,
               fontSize: 50,
             }}
           >
             {s.n}
           </div>
-          <div style={{ fontFamily, fontWeight: 900, fontSize: 62, flex: 1 }}>
+          <div style={{ fontFamily, fontWeight: 700, fontSize: 62, flex: 1 }}>
             {s.text.toUpperCase()}
           </div>
           <Emo char={s.emoji} size={96} />

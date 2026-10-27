@@ -27,14 +27,14 @@ export const PastelBackground: React.FC<{ readonly tint?: string }> = ({
             height: b.r * 2,
             borderRadius: "50%",
             backgroundColor: b.color,
-            opacity: 0.55,
+            opacity: 0.35,
             filter: "blur(60px)",
           }}
         />
       ))}
       <AbsoluteFill
         style={{
-          backgroundImage: `radial-gradient(${P.inkSoft}22 2px, transparent 2px)`,
+          backgroundImage: `radial-gradient(${P.inkSoft}10 2px, transparent 2px)`,
           backgroundSize: "36px 36px",
         }}
       />

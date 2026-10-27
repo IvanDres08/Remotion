@@ -44,7 +44,7 @@ export const Captions: React.FC<{
   const pop = spring({
     frame: frame - Math.round((page.startMs / 1000) * fps),
     fps,
-    config: { damping: 13, stiffness: 240 },
+    config: { damping: 18, stiffness: 220 },
     durationInFrames: 9,
   });
 
@@ -53,14 +53,15 @@ export const Captions: React.FC<{
       <div
         style={{
           maxWidth: 940,
-          padding: "14px 26px",
-          borderRadius: 36,
-          backgroundColor: P.white,
-          boxShadow: "0 14px 40px rgba(61,53,83,0.28)",
-          border: `5px solid ${accent}`,
+          padding: "12px 24px",
+          borderRadius: 26,
+          backgroundColor: "rgba(255,255,255,0.94)",
+          boxShadow: "0 10px 30px rgba(62,58,71,0.18)",
+          border: `3px solid ${accent}`,
           fontFamily,
-          fontWeight: 900,
-          fontSize: 70,
+          fontWeight: 700,
+          fontSize: 60,
+          letterSpacing: 0.5,
           lineHeight: 1.2,
           textAlign: "center",
           textTransform: "uppercase",
@@ -78,7 +79,7 @@ export const Captions: React.FC<{
                 display: "inline-block",
                 marginLeft: i > 0 && word !== t.text ? "0.25em" : 0,
                 padding: "0 10px",
-                borderRadius: 16,
+                borderRadius: 12,
                 backgroundColor: active ? accent : "transparent",
               }}
             >

@@ -10,12 +10,7 @@ const NOEXIT_AT = 52;
 export const NoExit: React.FC = () => {
   const frame = useCurrentFrame();
   return (
-    <SceneShell tint="#EAF4FF">
-      <Centered top={250}>
-        <Sticker bg={P.blue} emoji="🌀">
-          Esos momentos…
-        </Sticker>
-      </Centered>
+    <SceneShell tint="#EAF0F5">
       {[0, 1, 2, 3].map((i) => (
         <div
           key={i}
@@ -32,6 +27,11 @@ export const NoExit: React.FC = () => {
           }}
         />
       ))}
+      <Centered top={250}>
+        <Sticker bg={P.blue} emoji="🌀">
+          Esos momentos…
+        </Sticker>
+      </Centered>
       <Emoji char="🧍" size={220} x={540} y={820} bob={0} />
       <Emoji char="🔁" size={120} x={700} y={640} delay={LOOP_AT} />
       <Centered top={1150}>
@@ -39,7 +39,7 @@ export const NoExit: React.FC = () => {
           delay={NOEXIT_AT}
           emoji="🚫"
           bg={P.rose}
-          rotate={-4}
+          rotate={0}
           fontSize={66}
         >
           Sin salida

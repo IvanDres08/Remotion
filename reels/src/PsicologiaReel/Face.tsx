@@ -84,7 +84,11 @@ export const Phrase: React.FC<Props> = ({
           style={{ width: "100%", height: "100%" }}
         />
       </div>
-      <Audio src={staticFile("psicologia/voz.wav")} trimBefore={trimBefore} volume={0.78} />
+      <Audio
+        src={staticFile("psicologia/voz.wav")}
+        trimBefore={trimBefore}
+        volume={0.78}
+      />
     </AbsoluteFill>
   );
 };

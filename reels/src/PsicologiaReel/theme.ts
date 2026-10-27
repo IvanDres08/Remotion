@@ -1,18 +1,19 @@
-// Soft pastel palette.
+// Muted, desaturated pastels (dusty rose, sage, mist blue, lavender grey) on
+// a warm off-white, with a soft charcoal for text.
 export const P = {
-  cream: "#FFF7F0",
-  lavender: "#CDB4DB",
-  lilac: "#E2D4F0",
-  pink: "#FFC8DD",
-  rose: "#FFAFCC",
-  blue: "#BDE0FE",
-  sky: "#A2D2FF",
-  mint: "#B9FBC0",
-  peach: "#FFD6A5",
-  lemon: "#FDFFB6",
-  ink: "#3D3553",
-  inkSoft: "#6B5E86",
+  cream: "#F7F3EE",
+  lavender: "#DCD5E6",
+  lilac: "#ECE7F1",
+  pink: "#EEDADC",
+  rose: "#DDBCC2",
+  blue: "#D8E2EB",
+  sky: "#C3D3E0",
+  mint: "#D8E5DA",
+  peach: "#F0E1D3",
+  lemon: "#F2EDDA",
+  ink: "#3E3A47",
+  inkSoft: "#7A7486",
   white: "#FFFFFF",
 };
 
-export const ACCENTS = [P.lavender, P.pink, P.blue, P.mint, P.peach];
+export const ACCENTS = [P.lavender, P.rose, P.sky, P.mint, P.peach];
