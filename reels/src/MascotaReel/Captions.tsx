@@ -16,7 +16,9 @@ type Range = readonly (readonly [number, number])[];
 export const Captions: React.FC<{
   readonly captions: Caption[];
   readonly scenes: Range;
-}> = ({ captions, scenes }) => {
+  // Split-screen ranges: captions sit on the seam between panel and speaker.
+  readonly splits?: Range;
+}> = ({ captions, scenes, splits = [] }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const nowMs = (frame / fps) * 1000;
@@ -35,7 +37,8 @@ export const Captions: React.FC<{
   );
   if (idx === -1) return null;
   const page = pages[idx];
-  const top = scenes.some(([a, b]) => frame >= a && frame < b) ? 1330 : 1250;
+  const inRange = (r: Range) => r.some(([a, b]) => frame >= a && frame < b);
+  const top = inRange(splits) ? 950 : inRange(scenes) ? 1330 : 1250;
   const startF = (page.startMs / 1000) * fps;
   const p = interpolate(frame, [startF, startF + 6], [0, 1], {
     extrapolateLeft: "clamp",

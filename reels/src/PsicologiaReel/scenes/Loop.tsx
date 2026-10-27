@@ -1,23 +1,23 @@
-import { interpolate, useCurrentFrame } from "remotion";
-import { SceneShell } from "../SceneShell";
-import { Centered, Emoji, Sticker } from "../ui";
-import { P } from "../theme";
+import { Easing, interpolate, useCurrentFrame } from "remotion";
+import { B } from "../../MascotaReel/theme";
+import { Kicker, Scene, Title, useIn } from "../../MascotaReel/ui";
 
 // "...un bucle, en el cual el cerebro se confunde"
-const BRAIN_AT = 35;
 const CONFUSED_AT = 51;
-const ORBIT = ["💭", "😟", "📱", "🗣️", "⏰", "💬"];
 
 export const Loop: React.FC = () => {
   const frame = useCurrentFrame();
-  const shake = frame >= CONFUSED_AT ? Math.sin(frame * 2.2) * 5 : 0;
+  const draw = useIn(2, 30);
+  const confused = Easing.out(Easing.cubic)(
+    interpolate(frame, [CONFUSED_AT, CONFUSED_AT + 14], [0, 1], {
+      extrapolateLeft: "clamp",
+      extrapolateRight: "clamp",
+    }),
+  );
+  const a = frame / 9;
+  const wobble = confused * Math.sin(frame / 2) * 4;
   return (
-    <SceneShell tint="#F5ECEE" exit={false}>
-      <Centered top={250}>
-        <Sticker bg={P.pink} emoji="🔁">
-          En bucle
-        </Sticker>
-      </Centered>
+    <Scene exit={false}>
       <svg
         width={760}
         height={760}
@@ -25,81 +25,65 @@ export const Loop: React.FC = () => {
         style={{
           position: "absolute",
           left: 160,
-          top: 400,
-          transform: `rotate(${frame * 4}deg)`,
+          top: 440,
+          transform: `rotate(${wobble}deg)`,
         }}
       >
-        {[0, 120, 240].map((a) => (
-          <g key={a} transform={`rotate(${a} 380 380)`}>
-            <path
-              d="M380 60 A320 320 0 0 1 657 220"
-              stroke={P.lavender}
-              strokeWidth="34"
-              fill="none"
-              strokeLinecap="round"
-            />
-            <path d="M630 170 L680 240 L596 246 Z" fill={P.lavender} />
-          </g>
+        <circle
+          cx="380"
+          cy="380"
+          r="300"
+          fill="none"
+          stroke={B.sand}
+          strokeWidth="2"
+          pathLength={1}
+          strokeDasharray="1"
+          strokeDashoffset={1 - draw}
+        />
+        <circle
+          cx="380"
+          cy="380"
+          r="250"
+          fill="none"
+          stroke={B.beige}
+          strokeWidth="2"
+          strokeDasharray="4 14"
+        />
+        {[0, 1, 2].map((i) => (
+          <circle
+            key={i}
+            cx={380 + Math.cos(a + (i * Math.PI * 2) / 3) * 300}
+            cy={380 + Math.sin(a + (i * Math.PI * 2) / 3) * 300}
+            r={14 - i * 3}
+            fill={B.gold}
+            opacity={draw * (1 - i * 0.25)}
+          />
         ))}
       </svg>
-      {ORBIT.map((e, i) => {
-        const a = (i / ORBIT.length) * Math.PI * 2 + frame / 14;
-        return (
-          <Emoji
-            key={e}
-            char={e}
-            size={110}
-            x={540 + Math.cos(a) * 250}
-            y={780 + Math.sin(a) * 250}
-            delay={i * 3}
-            bob={0}
-          />
-        );
-      })}
       <div
         style={{
           position: "absolute",
-          inset: 0,
-          transform: `translateX(${shake}px)`,
+          top: 740,
+          left: 0,
+          right: 0,
+          textAlign: "center",
         }}
       >
-        <Emoji char="🧠" size={260} x={540} y={780} delay={BRAIN_AT} />
-        {frame >= CONFUSED_AT ? (
-          <>
-            <Emoji char="❓" size={110} x={420} y={600} delay={CONFUSED_AT} />
-            <Emoji
-              char="❓"
-              size={90}
-              x={680}
-              y={620}
-              delay={CONFUSED_AT + 4}
-            />
-            <Emoji
-              char="😵‍💫"
-              size={150}
-              x={760}
-              y={960}
-              delay={CONFUSED_AT + 2}
-            />
-          </>
-        ) : null}
+        <Title delay={6} size={150} italic>
+          Bucle
+        </Title>
       </div>
       <div
         style={{
           position: "absolute",
-          inset: 0,
-          backgroundColor: P.rose,
-          opacity: interpolate(
-            frame,
-            [CONFUSED_AT, CONFUSED_AT + 3, CONFUSED_AT + 10],
-            [0, 0.1, 0],
-            {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-            },
-          ),
+          top: 300,
+          left: 0,
+          right: 0,
+          textAlign: "center",
         }}
-      />
-    </SceneShell>
+      >
+        <Kicker delay={CONFUSED_AT}>El cerebro se confunde</Kicker>
+      </div>
+    </Scene>
   );
 };

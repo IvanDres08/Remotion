@@ -1,50 +1,58 @@
 import { useCurrentFrame } from "remotion";
-import { SceneShell } from "../SceneShell";
-import { Centered, Emoji, Sticker } from "../ui";
-import { P } from "../theme";
+import { B } from "../../MascotaReel/theme";
+import { Kicker, Scene, Title } from "../../MascotaReel/ui";
 
 // "esos momentos en el cual estás en un bucle sin salida"
-const LOOP_AT = 43;
 const NOEXIT_AT = 52;
 
 export const NoExit: React.FC = () => {
   const frame = useCurrentFrame();
   return (
-    <SceneShell tint="#EAF0F5">
-      {[0, 1, 2, 3].map((i) => (
-        <div
-          key={i}
-          style={{
-            position: "absolute",
-            left: 540 - (180 + i * 90),
-            top: 820 - (180 + i * 90),
-            width: (180 + i * 90) * 2,
-            height: (180 + i * 90) * 2,
-            borderRadius: 120 - i * 10,
-            border: `22px solid ${[P.sky, P.lavender, P.pink, P.mint][i]}`,
-            borderTopColor: "transparent",
-            transform: `rotate(${(i % 2 ? -1 : 1) * frame * (2 + i)}deg)`,
-          }}
-        />
-      ))}
-      <Centered top={250}>
-        <Sticker bg={P.blue} emoji="🌀">
-          Esos momentos…
-        </Sticker>
-      </Centered>
-      <Emoji char="🧍" size={220} x={540} y={820} bob={0} />
-      <Emoji char="🔁" size={120} x={700} y={640} delay={LOOP_AT} />
-      <Centered top={1150}>
-        <Sticker
-          delay={NOEXIT_AT}
-          emoji="🚫"
-          bg={P.rose}
-          rotate={0}
-          fontSize={66}
-        >
-          Sin salida
-        </Sticker>
-      </Centered>
-    </SceneShell>
+    <Scene>
+      {[0, 1, 2, 3, 4].map((i) => {
+        const r = 120 + i * 80;
+        return (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              left: 540 - r,
+              top: 800 - r,
+              width: r * 2,
+              height: r * 2,
+              borderRadius: 60 + i * 10,
+              border: `2px solid ${[B.gold, B.taupe, B.sand, B.blush, B.sage][i]}`,
+              borderTopColor: "transparent",
+              transform: `rotate(${(i % 2 ? -1 : 1) * frame * (0.8 + i * 0.3)}deg)`,
+              opacity: 0.9,
+            }}
+          />
+        );
+      })}
+      <div
+        style={{
+          position: "absolute",
+          top: 300,
+          left: 0,
+          right: 0,
+          textAlign: "center",
+        }}
+      >
+        <Kicker delay={2}>Esos momentos…</Kicker>
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          top: 720,
+          left: 0,
+          right: 0,
+          textAlign: "center",
+        }}
+      >
+        <Title delay={NOEXIT_AT - 6} size={120} italic>
+          sin salida
+        </Title>
+      </div>
+    </Scene>
   );
 };

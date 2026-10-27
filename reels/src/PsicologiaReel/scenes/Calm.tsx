@@ -1,47 +1,31 @@
-import { useCurrentFrame } from "remotion";
-import { SceneShell } from "../SceneShell";
-import { Centered, Emoji, Sticker } from "../ui";
-import { P } from "../theme";
+import { Kicker, Rule, Scene, Title } from "../../MascotaReel/ui";
+import { B } from "../../MascotaReel/theme";
 
-// "...a dejar de sobrepensar."
-const BYE_AT = 26;
-const SAVE_AT = 40;
-
-export const Calm: React.FC = () => {
-  const frame = useCurrentFrame();
-  return (
-    <SceneShell tint="#EDF3EE" exit={false}>
-      <Centered top={250}>
-        <Sticker delay={BYE_AT} emoji="👋" bg={P.mint} fontSize={56}>
-          Adiós sobrepensar
-        </Sticker>
-      </Centered>
-      <Emoji char="🧠" size={300} x={540} y={760} />
-      <Emoji char="😌" size={150} x={720} y={900} delay={8} />
-      {[0, 1, 2, 3, 4].map((i) => {
-        const a = (i / 5) * Math.PI * 2 + frame / 20;
-        return (
-          <Emoji
-            key={i}
-            char="✨"
-            size={80}
-            x={540 + Math.cos(a) * 260}
-            y={760 + Math.sin(a) * 220}
-            delay={i * 3}
-          />
-        );
-      })}
-      <Centered top={1120}>
-        <Sticker
-          delay={SAVE_AT}
-          emoji="📌"
-          bg={P.white}
-          fontSize={58}
-          rotate={0}
-        >
-          Guarda este video
-        </Sticker>
-      </Centered>
-    </SceneShell>
-  );
-};
+// "...a dejar de sobrepensar." + end card.
+export const Calm: React.FC = () => (
+  <Scene exit={false}>
+    <div
+      style={{
+        position: "absolute",
+        top: 560,
+        left: 0,
+        right: 0,
+        textAlign: "center",
+      }}
+    >
+      <Kicker delay={6}>Psicología · Bienestar</Kicker>
+      <div style={{ marginTop: 18 }}>
+        <Title delay={20} size={112}>
+          Deja de
+        </Title>
+        <Title delay={30} size={112} italic>
+          sobrepensar
+        </Title>
+      </div>
+      <Rule delay={40} />
+      <Kicker delay={52} color={B.inkSoft}>
+        Guarda este video
+      </Kicker>
+    </div>
+  </Scene>
+);

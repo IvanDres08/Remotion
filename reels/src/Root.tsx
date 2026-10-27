@@ -35,13 +35,10 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="PsicologiaReel"
         component={PsicologiaReel}
-        durationInFrames={1059}
+        durationInFrames={1089}
         fps={30}
         width={1080}
         height={1920}
-        defaultProps={{
-          hook: "¿Te ha pasado?",
-        }}
       />
       <Composition
         id="MascotaReel"

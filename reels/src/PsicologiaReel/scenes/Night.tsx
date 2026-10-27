@@ -1,126 +1,126 @@
-import { interpolate, useCurrentFrame } from "remotion";
-import { Emo } from "../Emo";
-import { fontFamily } from "../fonts";
-import { SceneShell } from "../SceneShell";
-import { Card, Emoji, Sticker } from "../ui";
-import { P } from "../theme";
+import { Easing, interpolate, useCurrentFrame } from "remotion";
+import { serif } from "../../MascotaReel/fonts";
+import { B } from "../../MascotaReel/theme";
+import { Kicker, Scene, Title, useIn } from "../../MascotaReel/ui";
 
 // "justo antes de dormir te llegan pensamientos constantes acerca de la
 //  conversación de hace mil años"
 const THOUGHTS = [
-  { text: "¿Y si…?", emoji: "💭", x: 110, y: 470, at: 31 },
-  { text: "¿Por qué dije eso?", emoji: "😳", x: 440, y: 380, at: 38 },
-  { text: "Debí decir…", emoji: "", x: 150, y: 640, at: 45 },
-  { text: "", emoji: "😩", x: 720, y: 600, at: 52 },
+  { text: "¿Y si…?", x: 120, y: 760, at: 31 },
+  { text: "¿Por qué dije eso?", x: 430, y: 880, at: 38 },
+  { text: "Debí decir…", x: 170, y: 1010, at: 45 },
+  { text: "¿Y si piensan que…?", x: 380, y: 1130, at: 52 },
 ];
 const CHAT_AT = 90;
 const AGES_AT = 116;
 
+const Moon: React.FC = () => {
+  const p = useIn(2, 30);
+  return (
+    <svg
+      width={150}
+      height={150}
+      viewBox="0 0 100 100"
+      style={{ position: "absolute", right: 120, top: 250 }}
+    >
+      <path
+        d="M62 10 A40 40 0 1 0 90 66 A32 32 0 1 1 62 10 Z"
+        fill="none"
+        stroke={B.gold}
+        strokeWidth="2.5"
+        pathLength={1}
+        strokeDasharray="1"
+        strokeDashoffset={1 - p}
+      />
+    </svg>
+  );
+};
+
 export const Night: React.FC = () => {
   const frame = useCurrentFrame();
-  const fadeThoughts = interpolate(frame, [CHAT_AT - 6, CHAT_AT], [1, 0], {
+  const fade = interpolate(frame, [CHAT_AT - 8, CHAT_AT], [1, 0], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
+  const quote = useIn(CHAT_AT, 16);
   return (
-    <SceneShell tint="#EAE6F0">
-      <Emoji char="🌙" size={190} x={890} y={300} />
-      <Emoji char="✨" size={90} x={700} y={250} delay={4} />
-      <Emoji char="✨" size={70} x={180} y={300} delay={8} />
-      <Card
-        style={{
-          left: 90,
-          top: 230,
-          padding: "16px 30px",
-          fontWeight: 700,
-          fontSize: 56,
-        }}
-        bg={P.lilac}
-      >
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 12 }}>
-          <Emo char="⏰" size={60} /> 2:47 AM
-        </span>
-      </Card>
-      <Emoji char="🛌" size={430} x={540} y={1030} bob={4} />
-      <div style={{ opacity: fadeThoughts }}>
-        {THOUGHTS.map((t) => (
-          <Card
-            key={t.at}
-            delay={t.at}
-            bg={P.white}
-            style={{
-              left: t.x,
-              top: t.y,
-              padding: "18px 30px",
-              fontWeight: 700,
-              fontSize: 50,
-            }}
-          >
-            <span
+    <Scene>
+      <Moon />
+      <div style={{ position: "absolute", top: 300, left: 110 }}>
+        <Kicker delay={2}>Antes de dormir</Kicker>
+        <div style={{ marginTop: 10 }}>
+          <Title delay={6} size={150}>
+            2:47
+          </Title>
+        </div>
+      </div>
+      <div style={{ opacity: fade }}>
+        {THOUGHTS.map((t) => {
+          const p = Easing.out(Easing.cubic)(
+            interpolate(frame, [t.at, t.at + 14], [0, 1], {
+              extrapolateLeft: "clamp",
+              extrapolateRight: "clamp",
+            }),
+          );
+          return (
+            <div
+              key={t.at}
               style={{
-                fontFamily,
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 12,
+                position: "absolute",
+                left: t.x,
+                top: t.y,
+                fontFamily: serif,
+                fontStyle: "italic",
+                fontSize: 64,
+                color: B.inkSoft,
+                opacity: p * 0.9,
+                transform: `translateY(${(1 - p) * 20 + Math.sin(frame / 20 + t.at) * 6}px)`,
+                filter: p < 1 ? `blur(${(1 - p) * 6}px)` : undefined,
               }}
             >
               {t.text}
-              {t.emoji ? <Emo char={t.emoji} size={60} /> : null}
-            </span>
-          </Card>
-        ))}
+            </div>
+          );
+        })}
       </div>
       {frame >= CHAT_AT ? (
-        <>
-          <Card
-            delay={CHAT_AT}
-            bg={P.blue}
-            style={{
-              left: 120,
-              top: 400,
-              width: 840,
-              padding: 34,
-              boxSizing: "border-box",
-            }}
-          >
-            <div style={{ fontWeight: 700, fontSize: 40, color: P.inkSoft }}>
-              <Emo char="💬" size={46} /> Conversación
-            </div>
-            <div style={{ fontWeight: 700, fontSize: 60, marginTop: 8 }}>
-              «…y entonces yo le dije…»
-            </div>
-            <div
-              style={{
-                position: "absolute",
-                right: -20,
-                top: -40,
-              }}
-            >
-              <Emo char="🕸️" size={120} />
-            </div>
-          </Card>
+        <div
+          style={{
+            position: "absolute",
+            left: 100,
+            right: 100,
+            top: 760,
+            textAlign: "center",
+            opacity: quote,
+            transform: `translateY(${(1 - quote) * 30}px)`,
+          }}
+        >
           <div
             style={{
-              position: "absolute",
-              left: 0,
-              right: 0,
-              top: 680,
-              display: "flex",
-              justifyContent: "center",
+              fontFamily: serif,
+              fontSize: 200,
+              lineHeight: 0.6,
+              color: B.sand,
             }}
           >
-            <Sticker
-              delay={AGES_AT}
-              bg={P.peach}
-              emoji="🦖"
-              rotate={-2}
-              fontSize={60}
-            >
-              Hace mil años
-            </Sticker>
+            “
           </div>
-        </>
+          <div
+            style={{
+              fontFamily: serif,
+              fontStyle: "italic",
+              fontSize: 76,
+              color: B.ink,
+              lineHeight: 1.15,
+            }}
+          >
+            …y entonces yo le dije…
+          </div>
+          <div style={{ marginTop: 34 }}>
+            <Kicker delay={AGES_AT}>Una conversación de hace mil años</Kicker>
+          </div>
+        </div>
       ) : null}
-    </SceneShell>
+    </Scene>
   );
 };

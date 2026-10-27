@@ -53,7 +53,7 @@ export const Phrase: React.FC<Props> = ({
     entry === "punch" ? 1 + 0.14 * (1 - settle) : 1 - 0.1 * (1 - settle);
   const s =
     interpolate(progress, [0, 1], [zoomFrom, zoomTo]) * target.zoomMul * kick;
-  const blur = Math.max(0, 6 * (1 - frame / 5));
+  const blur = Math.max(0, 3 * (1 - frame / 5));
 
   const tx = Math.min(0, Math.max(SRC_W - SRC_W * s, 540 - s * fx * SRC_W));
   const ty = Math.min(

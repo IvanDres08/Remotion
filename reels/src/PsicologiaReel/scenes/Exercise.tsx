@@ -1,99 +1,115 @@
 import { interpolate, useCurrentFrame } from "remotion";
-import { Emo } from "../Emo";
-import { fontFamily } from "../fonts";
-import { SplitPanel } from "../SceneShell";
-import { Card, Centered, Sticker } from "../ui";
-import { P } from "../theme";
+import { sans, serif } from "../../MascotaReel/fonts";
+import { B } from "../../MascotaReel/theme";
+import { Kicker, useIn } from "../../MascotaReel/ui";
+import { Split } from "../Split";
 
 // "puedes hacer el ejercicio de escribirlo y luego de escribirlo leerlo y decir
 //  'esto ya pasó'"
 const STEPS = [
-  { n: 1, emoji: "✍️", text: "Escríbelo", at: 39, bg: P.mint },
-  { n: 2, emoji: "👀", text: "Léelo", at: 98, bg: P.blue },
-  { n: 3, emoji: "✅", text: "«Esto ya pasó»", at: 125, bg: P.pink },
+  { n: "01", text: "Escríbelo", at: 39 },
+  { n: "02", text: "Léelo", at: 98 },
+  { n: "03", text: "«Esto ya pasó»", at: 125 },
 ];
 const DONE_AT = 143;
 
-export const Exercise: React.FC = () => {
+const Step: React.FC<{
+  readonly n: string;
+  readonly text: string;
+  readonly at: number;
+  readonly top: number;
+  readonly last: boolean;
+}> = ({ n, text, at, top, last }) => {
   const frame = useCurrentFrame();
-  const write = interpolate(
-    frame,
-    [STEPS[0].at + 4, STEPS[0].at + 40],
-    [0, 1],
-    {
-      extrapolateLeft: "clamp",
-      extrapolateRight: "clamp",
-    },
-  );
-  const glow =
-    frame >= DONE_AT ? 0.5 + 0.5 * Math.sin((frame - DONE_AT) / 3) : 0;
+  const p = useIn(at, 16);
+  const rule = useIn(at + 6, 20);
+  const doneIn = useIn(DONE_AT, 14);
+  const done = last ? doneIn : 0;
   return (
-    <SplitPanel tint={P.cream}>
-      <Centered top={240}>
-        <Sticker delay={10} emoji="📝" bg={P.lavender} fontSize={58}>
-          El ejercicio
-        </Sticker>
-      </Centered>
-      {STEPS.map((s, i) => (
-        <Card
-          key={s.n}
-          delay={s.at}
-          bg={s.bg}
+    <div
+      style={{
+        position: "absolute",
+        left: 120,
+        right: 120,
+        top,
+        opacity: p,
+        transform: `translateX(${(1 - p) * -40}px)`,
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "baseline", gap: 30 }}>
+        <span
           style={{
-            left: 80,
-            top: 400 + i * 170,
-            width: 920,
-            height: 140,
-            display: "flex",
-            alignItems: "center",
-            gap: 26,
-            padding: "0 34px",
-            boxSizing: "border-box",
-            boxShadow:
-              i === 2 && glow > 0
-                ? `0 0 ${30 + glow * 40}px ${P.rose}, 0 20px 50px rgba(61,53,83,0.2)`
-                : undefined,
+            fontFamily: sans,
+            fontWeight: 500,
+            fontSize: 30,
+            letterSpacing: 4,
+            color: B.gold,
           }}
         >
-          <div
-            style={{
-              width: 80,
-              height: 80,
-              borderRadius: "50%",
-              backgroundColor: P.white,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontWeight: 700,
-              fontSize: 50,
-            }}
-          >
-            {s.n}
-          </div>
-          <div style={{ fontFamily, fontWeight: 700, fontSize: 62, flex: 1 }}>
-            {s.text.toUpperCase()}
-          </div>
-          <Emo char={s.emoji} size={96} />
-          {i === 0 ? (
-            <svg
-              width={160}
-              height={60}
-              viewBox="0 0 160 60"
-              style={{ position: "absolute", right: 150, top: 40 }}
-            >
-              <path
-                d="M5 40 C20 10 30 50 45 25 C60 0 70 50 85 25 C100 5 110 45 125 25 C135 12 145 30 155 20"
-                stroke={P.ink}
-                strokeWidth="6"
-                fill="none"
-                strokeLinecap="round"
-                strokeDasharray="400"
-                strokeDashoffset={400 * (1 - write)}
-              />
-            </svg>
-          ) : null}
-        </Card>
-      ))}
-    </SplitPanel>
+          {n}
+        </span>
+        <span
+          style={{
+            fontFamily: serif,
+            fontStyle: last ? "italic" : "normal",
+            fontSize: 80,
+            color: last ? B.gold : B.ink,
+          }}
+        >
+          {text}
+        </span>
+      </div>
+      <div
+        style={{
+          height: 2,
+          marginTop: 14,
+          width: `${rule * 100}%`,
+          backgroundColor: last && done > 0 ? B.gold : B.sand,
+        }}
+      />
+      {n === "01" ? (
+        <svg
+          width={220}
+          height={60}
+          viewBox="0 0 160 60"
+          style={{ position: "absolute", right: 0, top: 10 }}
+        >
+          <path
+            d="M5 40 C20 10 30 50 45 25 C60 0 70 50 85 25 C100 5 110 45 125 25 C135 12 145 30 155 20"
+            stroke={B.taupe}
+            strokeWidth="2.5"
+            fill="none"
+            strokeLinecap="round"
+            pathLength={1}
+            strokeDasharray="1"
+            strokeDashoffset={
+              1 -
+              interpolate(frame, [at + 4, at + 40], [0, 1], {
+                extrapolateLeft: "clamp",
+                extrapolateRight: "clamp",
+              })
+            }
+          />
+        </svg>
+      ) : null}
+    </div>
   );
 };
+
+export const Exercise: React.FC = () => (
+  <Split>
+    <div style={{ position: "absolute", top: 290, left: 120 }}>
+      <Kicker delay={10}>El ejercicio</Kicker>
+    </div>
+    {STEPS.map((s, i) => (
+      <Step
+        key={s.n}
+        n={s.n}
+        text={s.text}
+        at={s.at}
+        top={400 + i * 170}
+        last={i === 2}
+      />
+    ))}
+  </Split>
+);

@@ -7,10 +7,11 @@ import {
   staticFile,
   useVideoConfig,
 } from "remotion";
-import { ProgressBar } from "../ColagenoReel/ProgressBar";
-import { Captions } from "./Captions";
+import { Captions } from "../MascotaReel/Captions";
+import "../MascotaReel/fonts";
+import { B } from "../MascotaReel/theme";
+import { Kicker, Rule, Sweep, Title, useIn } from "../MascotaReel/ui";
 import { FaceLayer, Phrase } from "./Face";
-import "./fonts";
 import { Calm } from "./scenes/Calm";
 import { Exercise } from "./scenes/Exercise";
 import { Loop } from "./scenes/Loop";
@@ -19,20 +20,15 @@ import { NoExit } from "./scenes/NoExit";
 import { Separate } from "./scenes/Separate";
 import { Survival } from "./scenes/Survival";
 import { ThinkVsRuminate } from "./scenes/ThinkVsRuminate";
-import { P } from "./theme";
-import { Centered, Sticker } from "./ui";
+import { NoteCard } from "./Split";
 
-type Props = {
-  readonly hook: string;
-};
-
-// Full-screen illustrated scenes (face hidden) and split screens (graphic on
-// top, speaker below). Keep in sync with the <Sequence>s below.
+// Full-screen scenes (speaker hidden) and split screens (paper panel on top,
+// speaker below). Keep in sync with the <Sequence>s below.
 const SCENES = [
   [60, 198],
   [349, 528],
   [713, 789],
-  [1001, 1059],
+  [1001, 1089],
 ] as const;
 const SPLITS = [
   [198, 349],
@@ -40,15 +36,42 @@ const SPLITS = [
   [789, 947],
 ] as const;
 
-// Pauses longer than ~0.25 s, the take changes and the CapCut end card were
-// cut out of the 44.7 s original (-> 35.3 s). Each phrase enters with a short
-// zoom/blur transition; the voice comes from a cleaned-up track (high-pass,
-// FFT denoise, de-mud EQ, gate for the room echo tail, compression, loudness).
-export const PsicologiaReel: React.FC<Props> = ({ hook }) => {
+const Note: React.FC<{ readonly kicker: string; readonly text: string }> = ({
+  kicker,
+  text,
+}) => {
+  const p = useIn(0, 12);
+  return (
+    <div
+      style={{
+        position: "absolute",
+        top: 250,
+        left: 0,
+        right: 0,
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <NoteCard p={p}>
+        <Kicker delay={2}>{kicker}</Kicker>
+        <div style={{ marginTop: 6 }}>
+          <Title delay={4} size={84} italic>
+            {text}
+          </Title>
+        </div>
+      </NoteCard>
+    </div>
+  );
+};
+
+// Same cut as before (pauses, take changes and the CapCut end card removed,
+// cleaned voice), restyled to match the mascota reel: ivory/beige/pastel
+// paper scenes, Playfair Display + Poppins, line illustrations, no emojis.
+export const PsicologiaReel: React.FC = () => {
   const { fps, durationInFrames } = useVideoConfig();
 
   return (
-    <AbsoluteFill style={{ backgroundColor: P.cream }}>
+    <AbsoluteFill style={{ backgroundColor: B.ivory }}>
       <FaceLayer splits={SPLITS}>
         <TransitionSeries name="Voz y cara">
           <TransitionSeries.Sequence
@@ -182,12 +205,7 @@ export const PsicologiaReel: React.FC<Props> = ({ hook }) => {
       >
         <ThinkVsRuminate />
       </Sequence>
-      <Sequence
-        name="Bucle / cerebro confundido"
-        from={349}
-        durationInFrames={72}
-        premountFor={fps}
-      >
+      <Sequence name="Bucle" from={349} durationInFrames={72} premountFor={fps}>
         <Loop />
       </Sequence>
       <Sequence
@@ -207,7 +225,7 @@ export const PsicologiaReel: React.FC<Props> = ({ hook }) => {
         <Separate />
       </Sequence>
       <Sequence
-        name="Bucle sin salida"
+        name="Sin salida"
         from={713}
         durationInFrames={76}
         premountFor={fps}
@@ -223,32 +241,37 @@ export const PsicologiaReel: React.FC<Props> = ({ hook }) => {
         <Exercise />
       </Sequence>
       <Sequence
-        name="Dejar de sobrepensar"
+        name="Deja de sobrepensar"
         from={1001}
-        durationInFrames={58}
+        durationInFrames={88}
         premountFor={fps}
       >
         <Calm />
       </Sequence>
 
-      <Sequence name="Hook" durationInFrames={60} premountFor={fps}>
-        <Centered top={300}>
-          <Sticker emoji="🤔" bg={P.lavender} fontSize={66}>
-            {hook}
-          </Sticker>
-        </Centered>
+      <Sequence name="Título" durationInFrames={60} premountFor={fps}>
+        <AbsoluteFill
+          style={{ alignItems: "center", paddingTop: 200, textAlign: "center" }}
+        >
+          <Kicker delay={2}>Psicología · Bienestar</Kicker>
+          <div style={{ marginTop: 16 }}>
+            <Title delay={6} size={104}>
+              Pensar vs.
+            </Title>
+            <Title delay={12} size={104} italic>
+              rumiar
+            </Title>
+          </div>
+          <Rule delay={20} />
+        </AbsoluteFill>
       </Sequence>
       <Sequence
         name="Muy importante"
-        from={547}
-        durationInFrames={15}
+        from={541}
+        durationInFrames={21}
         premountFor={fps}
       >
-        <Centered top={300}>
-          <Sticker emoji="⚠️" bg={P.lemon} fontSize={64}>
-            Muy importante
-          </Sticker>
-        </Centered>
+        <Note kicker="Por eso es" text="muy importante" />
       </Sequence>
       <Sequence
         name="Le quita poder"
@@ -256,11 +279,13 @@ export const PsicologiaReel: React.FC<Props> = ({ hook }) => {
         durationInFrames={50}
         premountFor={fps}
       >
-        <Centered top={300}>
-          <Sticker emoji="🪫" bg={P.peach} fontSize={64}>
-            Le quita poder
-          </Sticker>
-        </Centered>
+        <Note kicker="Escribirlo" text="le quita poder" />
+      </Sequence>
+      <Sequence name="Transición 671" from={663} durationInFrames={16}>
+        <Sweep />
+      </Sequence>
+      <Sequence name="Transición 947" from={939} durationInFrames={16}>
+        <Sweep />
       </Sequence>
 
       <Captions
@@ -1076,140 +1101,64 @@ export const PsicologiaReel: React.FC<Props> = ({ hook }) => {
       />
 
       <Audio
-        src={staticFile("psicologia/musica.wav")}
+        src={staticFile("psicologia/musica-calma.wav")}
         volume={(f) =>
           interpolate(
             f,
-            [0, 15, durationInFrames - 30, durationInFrames],
-            [0, 0.09, 0.09, 0],
+            [0, 20, durationInFrames - 40, durationInFrames],
+            [0, 0.12, 0.12, 0],
             { extrapolateRight: "clamp" },
           )
         }
       />
-      <Sequence name="SFX whoosh 0" durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.24} />
-      </Sequence>
-      <Sequence name="SFX pop 4" from={4} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/pop.wav")} volume={0.24} />
-      </Sequence>
       <Sequence name="SFX whoosh 60" from={60} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.29} />
-      </Sequence>
-      <Sequence name="SFX pop 91" from={91} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/pop.wav")} volume={0.24} />
-      </Sequence>
-      <Sequence name="SFX pop 98" from={98} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/pop.wav")} volume={0.24} />
-      </Sequence>
-      <Sequence name="SFX pop 105" from={105} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/pop.wav")} volume={0.24} />
-      </Sequence>
-      <Sequence name="SFX pop 112" from={112} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/pop.wav")} volume={0.24} />
-      </Sequence>
-      <Sequence name="SFX whoosh 150" from={150} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.19} />
-      </Sequence>
-      <Sequence name="SFX boom 176" from={176} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/boom.wav")} volume={0.26} />
+        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.25} />
       </Sequence>
       <Sequence name="SFX whoosh 198" from={198} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.24} />
+        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.25} />
       </Sequence>
       <Sequence name="SFX ding 252" from={252} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/ding.wav")} volume={0.22} />
-      </Sequence>
-      <Sequence name="SFX pop 283" from={283} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/pop.wav")} volume={0.24} />
-      </Sequence>
-      <Sequence name="SFX whoosh 326" from={326} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.17} />
+        <Audio src={staticFile("psicologia/sfx/ding.wav")} volume={0.18} />
       </Sequence>
       <Sequence name="SFX whoosh 349" from={349} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.24} />
+        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.25} />
       </Sequence>
-      <Sequence name="SFX tick 355" from={355} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/tick.wav")} volume={0.24} />
-      </Sequence>
-      <Sequence name="SFX tick 379" from={379} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/tick.wav")} volume={0.24} />
-      </Sequence>
-      <Sequence name="SFX pop 384" from={384} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/pop.wav")} volume={0.24} />
-      </Sequence>
-      <Sequence name="SFX boom 400" from={400} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/boom.wav")} volume={0.19} />
-      </Sequence>
-      <Sequence name="SFX riser 420" from={420} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/riser.wav")} volume={0.22} />
-      </Sequence>
-      <Sequence name="SFX boom 446" from={446} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/boom.wav")} volume={0.24} />
+      <Sequence name="SFX ding 446" from={446} durationInFrames={45}>
+        <Audio src={staticFile("psicologia/sfx/ding.wav")} volume={0.16} />
       </Sequence>
       <Sequence name="SFX heartbeat 485" from={485} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/heartbeat.wav")} volume={0.38} />
-      </Sequence>
-      <Sequence name="SFX heartbeat 505" from={505} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/heartbeat.wav")} volume={0.38} />
-      </Sequence>
-      <Sequence name="SFX boom 513" from={513} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/boom.wav")} volume={0.24} />
-      </Sequence>
-      <Sequence name="SFX whoosh 522" from={522} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.24} />
-      </Sequence>
-      <Sequence name="SFX pop 547" from={547} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/pop.wav")} volume={0.26} />
+        <Audio src={staticFile("psicologia/sfx/heartbeat.wav")} volume={0.25} />
       </Sequence>
       <Sequence name="SFX whoosh 562" from={562} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.24} />
-      </Sequence>
-      <Sequence name="SFX pop 591" from={591} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/pop.wav")} volume={0.19} />
+        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.22} />
       </Sequence>
       <Sequence name="SFX ding 633" from={633} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/ding.wav")} volume={0.19} />
+        <Audio src={staticFile("psicologia/sfx/ding.wav")} volume={0.16} />
       </Sequence>
-      <Sequence name="SFX whoosh 666" from={666} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.22} />
+      <Sequence name="SFX whoosh 663" from={663} durationInFrames={45}>
+        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.28} />
       </Sequence>
       <Sequence name="SFX whoosh 713" from={713} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.24} />
-      </Sequence>
-      <Sequence name="SFX boom 765" from={765} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/boom.wav")} volume={0.24} />
-      </Sequence>
-      <Sequence name="SFX whoosh 789" from={789} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.24} />
-      </Sequence>
-      <Sequence name="SFX pop 812" from={812} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/pop.wav")} volume={0.22} />
-      </Sequence>
-      <Sequence name="SFX scribble 828" from={828} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/scribble.wav")} volume={0.29} />
-      </Sequence>
-      <Sequence name="SFX pop 887" from={887} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/pop.wav")} volume={0.22} />
-      </Sequence>
-      <Sequence name="SFX pop 914" from={914} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/pop.wav")} volume={0.22} />
-      </Sequence>
-      <Sequence name="SFX ding 932" from={932} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/ding.wav")} volume={0.24} />
-      </Sequence>
-      <Sequence name="SFX whoosh 942" from={942} durationInFrames={45}>
         <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.22} />
       </Sequence>
-      <Sequence name="SFX pop 951" from={951} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/pop.wav")} volume={0.24} />
+      <Sequence name="SFX whoosh 789" from={789} durationInFrames={45}>
+        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.22} />
+      </Sequence>
+      <Sequence name="SFX scribble 828" from={828} durationInFrames={45}>
+        <Audio src={staticFile("psicologia/sfx/scribble.wav")} volume={0.3} />
+      </Sequence>
+      <Sequence name="SFX ding 932" from={932} durationInFrames={45}>
+        <Audio src={staticFile("psicologia/sfx/ding.wav")} volume={0.2} />
+      </Sequence>
+      <Sequence name="SFX whoosh 939" from={939} durationInFrames={45}>
+        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.28} />
       </Sequence>
       <Sequence name="SFX whoosh 1001" from={1001} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.24} />
+        <Audio src={staticFile("psicologia/sfx/whoosh.wav")} volume={0.25} />
       </Sequence>
       <Sequence name="SFX ding 1038" from={1038} durationInFrames={45}>
-        <Audio src={staticFile("psicologia/sfx/ding.wav")} volume={0.22} />
+        <Audio src={staticFile("psicologia/sfx/ding.wav")} volume={0.18} />
       </Sequence>
-      <ProgressBar color={P.rose} />
     </AbsoluteFill>
   );
 };
