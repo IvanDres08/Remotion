@@ -94,3 +94,11 @@ Antes de editar, si no está claro, pregunta solo lo imprescindible:
 - **Subtítulos encima de las escenas:** si hay cutaways, los subtítulos van en una capa superior con tiempos de composición y cambian de posición (sobre la cabeza en la cara, debajo de los gráficos en las escenas).
 - **Producto:** recorta el producto de la foto con una máscara (PIL) a PNG con alfa y anímalo (caída con spring, flotación, brillo que lo recorre, sombra de contacto).
 - **Paleta:** toma los colores del producto/marca para subtítulos, etiquetas y fondos.
+
+## 8. Más patrones (reel de psicología, `reels/src/PsicologiaReel/`)
+
+- **Emojis:** la fuente Noto Color Emoji pinta de forma intermitente en el render headless. Pre-renderiza cada emoji a PNG con Playwright (`/opt/node22/lib/node_modules/playwright` + `@fontsource/noto-color-emoji`) en `public/emoji/<codepoints>.png` y úsalos con `<Img>` (componente `Emo`).
+- **Limpiar voz / eco (ffmpeg):** `highpass=f=90, afftdn=nr=14:nf=-42:tn=1, equalizer` (−4 dB @220 Hz, −2 dB @500 Hz, +3 dB @3.2 kHz), `agate` suave para cortar la cola de reverberación, `acompressor`, `loudnorm=I=-15`, `alimiter`. Usa el WAV limpio como `<Audio>` y el video en `muted`, ambos con el mismo `trimBefore`.
+- **SFX y música sin descargas:** sintetiza whoosh/pop/ding/boom/riser/heartbeat/tick/scribble y un loop lo-fi con numpy (ver historial del repo). Mezcla final ≈ −14 LUFS, pico < −1 dBFS (comprueba con `ebur128=peak=true`).
+- **Pausas con ruido de fondo:** si `silencedetect` no encuentra pausas, calcula la energía RMS en ventanas de 20 ms y usa un umbral relativo (p90 − 17 dB).
+- **Pantalla dividida:** un `FaceLayer` a nivel de composición (contexto React) baja la cara y reduce el zoom mientras un panel ocupa la mitad superior; las transiciones entre frases son un "kick" de zoom + desenfoque de 5 frames en cada clip.
