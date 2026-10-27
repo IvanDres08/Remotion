@@ -103,3 +103,9 @@ Antes de editar, si no está claro, pregunta solo lo imprescindible:
 - **Pausas con ruido de fondo:** si `silencedetect` no encuentra pausas, calcula la energía RMS en ventanas de 20 ms y usa un umbral relativo (p90 − 17 dB).
 - **Pantalla dividida:** un `FaceLayer` a nivel de composición (contexto React) baja la cara y reduce el zoom mientras un panel ocupa la mitad superior; las transiciones entre frases son un "kick" de zoom + desenfoque de 5 frames en cada clip.
 - **Look "profesional" (feedback del usuario):** pasteles desaturados (rosa empolvado, salvia, azul niebla, lavanda gris) sobre blanco roto, Poppins 500–700 (no 900), bordes de 3 px, sombras suaves, sin rotaciones ni rebotes exagerados (springs con damping ≥ 16), SFX filtrados y a bajo volumen (sin distorsión).
+
+## 9. Varios clips y estilo "serio/elegante" (reel de mascotas, `reels/src/MascotaReel/`)
+
+- **Unir clips:** normaliza cada clip con ffmpeg (aplica la rotación, mismo tamaño y 30 fps: `scale=576:1024,fps=30`) y concaténalos en un solo archivo; después trabaja con un único `trimBefore` por frase.
+- **Tomas repetidas:** si dos clips son tomas del mismo texto, no los pegues completos; usa la mejor parte de cada uno sin repetir la idea, y quita los errores ("ya, ya…").
+- **Estilo elegante:** Playfair Display (títulos y subtítulos; la palabra hablada en cursiva dorada) + Poppins 500 en etiquetas pequeñas con mucho espaciado; paleta marfil/beige/arena con pasteles suaves; sin emojis; transiciones con barrido de paneles beige y línea dorada, escenas con máscara redondeada que se abre y salida con desenfoque; cortes de cámara entre plano abierto, primer plano y detalle (p. ej. la mascota).

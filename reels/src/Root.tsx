@@ -1,6 +1,7 @@
 import { Composition } from "remotion";
 import { ColagenoReel } from "./ColagenoReel/ColagenoReel";
 import { CreatinaReel } from "./CreatinaReel/CreatinaReel";
+import { MascotaReel } from "./MascotaReel/MascotaReel";
 import { PsicologiaReel } from "./PsicologiaReel/PsicologiaReel";
 
 export const RemotionRoot: React.FC = () => {
@@ -41,6 +42,14 @@ export const RemotionRoot: React.FC = () => {
         defaultProps={{
           hook: "¿Te ha pasado?",
         }}
+      />
+      <Composition
+        id="MascotaReel"
+        component={MascotaReel}
+        durationInFrames={645}
+        fps={30}
+        width={1080}
+        height={1920}
       />
     </>
   );
