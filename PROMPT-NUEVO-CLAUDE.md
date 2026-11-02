@@ -24,7 +24,7 @@ Pasos:
    cp -a .claude/skills .claude/vendor ~/.claude/
    ```
    (8 skills de `reel-skills` son enlaces a `../vendor/reel-skills/skills/<nombre>`; sin `vendor/` quedan rotas.)
-3. Comprueba que estén estas 75 skills:
+3. Comprueba que estén estas 68 skills:
    - **Remotion oficiales (12):** remotion-best-practices, remotion-create, remotion-markup, remotion-captions, remotion-multimedia, remotion-studio, remotion-render, remotion-docs, remotion-interactivity, remotion-maps, remotion-saas, remotion-upgrade.
    - **Mía (1):** remotion-reels (mis reglas de edición; léela entera antes de editar).
    - **HyperFrames de HeyGen (21):** hyperframes, hyperframes-animation, hyperframes-audio, hyperframes-cli, hyperframes-core, hyperframes-creative, hyperframes-keyframes, hyperframes-registry, hyperframes-studio, embedded-captions, faceless-explainer, figma, general-video, media-use, motion-graphics, music-to-video, pr-to-video, product-launch-video, remotion-to-hyperframes, slideshow, talking-head-recut.
