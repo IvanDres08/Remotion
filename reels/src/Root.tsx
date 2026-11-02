@@ -52,7 +52,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="LumeReel"
         component={LumeReel}
-        durationInFrames={2657}
+        durationInFrames={2741}
         fps={30}
         width={1080}
         height={1920}
