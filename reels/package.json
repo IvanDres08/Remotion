@@ -16,6 +16,8 @@
     "remotion": "4.0.535"
   },
   "devDependencies": {
+    "@fontsource/bodoni-moda": "^5.3.0",
+    "@fontsource/manrope": "^5.3.0",
     "@fontsource/montserrat": "^5.3.0",
     "@fontsource/noto-color-emoji": "^5.3.2",
     "@fontsource/nunito": "^5.3.0",

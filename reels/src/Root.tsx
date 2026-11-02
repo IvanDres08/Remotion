@@ -1,6 +1,7 @@
 import { Composition } from "remotion";
 import { ColagenoReel } from "./ColagenoReel/ColagenoReel";
 import { CreatinaReel } from "./CreatinaReel/CreatinaReel";
+import { LumeReel } from "./LumeReel/LumeReel";
 import { MascotaReel } from "./MascotaReel/MascotaReel";
 import { PsicologiaReel } from "./PsicologiaReel/PsicologiaReel";
 
@@ -44,6 +45,14 @@ export const RemotionRoot: React.FC = () => {
         id="MascotaReel"
         component={MascotaReel}
         durationInFrames={645}
+        fps={30}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="LumeReel"
+        component={LumeReel}
+        durationInFrames={2657}
         fps={30}
         width={1080}
         height={1920}
